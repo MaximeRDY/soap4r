@@ -106,7 +106,11 @@ private
   # much memory for each singleton Object.  just instance_eval instead of it.
   def __define_attr_accessor(qname)
     # untaint depends GenSupport.safemethodname
-    name = Mapping.safemethodname(qname.name).untaint
+    begin
+      name = Mapping.safemethodname(qname.name).untaint
+    rescue Exception
+      name = qname.name
+    end
     # untaint depends on QName#dump
     qnamedump = qname.dump.untaint
     singleton = false
